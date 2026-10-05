@@ -1,0 +1,23 @@
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Nur Dateien, die Erkennungsmuster enthalten. AGENTS.md/CLAUDE.md werden bewusst gescannt."
+paths = [
+  '''^\.githooks/pre-commit$''',
+  '''^\.gitleaks\.toml$''',
+]
+
+# Zusatzregel: fängt Tokens OHNE verräterischen Variablennamen (z. B. HOSTINGER = "...")
+# über Zufälligkeit (Shannon-Entropie). Fehlalarm bei Hashes/IDs → Zeile mit  # gitleaks:allow  markieren.
+[[rules]]
+id = "hochentropie-string"
+description = "Langer zufälliger String in Anführungszeichen"
+regex = '''["']([A-Za-z0-9+/_\-]{24,})["']'''
+secretGroup = 1
+entropy = 4.0
+# Projektdaten mit vielen Hashes/IDs (z. B. JSON-Registries, minifizierte Bibliotheken): nur DIESE Regel
+# für die Pfade abschalten – die Standardregeln (echte Tokens) prüfen dort weiter. Pfade anpassen:
+# [rules.allowlist]
+# description = "Projektdaten mit Hashes/IDs"
+# paths = ['''^daten/verarbeitet/''', '''\.min\.js$''']

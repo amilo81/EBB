@@ -1,0 +1,28 @@
+{
+  "model": "opus",
+  "permissions": {
+    "defaultMode": "default",
+    "allow": [
+      "Bash(git status*)", "Bash(git diff*)", "Bash(git log*)", "Bash(git show*)",
+      "Bash(git branch*)", "Bash(git fetch*)", "Bash(git rev-parse*)", "Bash(gitleaks *)",
+      "Bash(ls)", "Bash(ls *)", "Bash(pwd)", "Bash(cat *)", "Bash(head *)", "Bash(tail *)",
+      "Bash(wc *)", "Bash(git ls-files*)", "Bash(git -C * status*)", "Bash(git -C * diff*)", "Bash(git -C * log*)", "Bash(git -C * show*)"
+    ],
+    "ask": [
+      "Bash(git commit*)", "Bash(git push*)", "Bash(git merge*)", "Bash(git rebase*)", "Bash(git reset*)",
+      "Bash(gh *)", "Bash(npm install*)", "Bash(npm i *)", "Bash(pip install*)", "Bash(winget *)"
+    ],
+    "deny": [
+      "Read(./.env)", "Read(./.env.*)", "Read(./secrets/**)",
+      "Bash(cat .env*)", "Bash(type .env*)", "Bash(Get-Content .env*)",
+      "Bash(git push --force*)", "Bash(git push -f*)", "Bash(git push * main*)",
+      "Bash(git commit --no-verify*)", "Bash(git commit -n*)", "Bash(git * --no-verify*)",
+      "Bash(git -c core.hooksPath*)", "Bash(git config core.hooksPath*)",
+      "Bash(gh repo create * --public*)", "Bash(gh repo edit * --visibility public*)"
+    ]
+  },
+  "extraKnownMarketplaces": {
+    "planer-worker": { "source": { "source": "github", "repo": "amilo81/Planer-Test-" } }
+  },
+  "enabledPlugins": { "pw@planer-worker": true }
+}

@@ -1,0 +1,3 @@
+#!/bin/sh
+# Weiterleitung an .git/hooks/prepare-commit-msg (siehe _kette)
+exec sh "$(dirname "$0")/_kette" prepare-commit-msg "$@"

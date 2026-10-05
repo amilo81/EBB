@@ -1,5 +1,13 @@
 # CLAUDE.md - AI Assistant Guide for EBB Repository
 
+@AGENTS.md
+
+## Planer-Worker-Grundgerüst (Adapter Claude Code)
+- Arbeitsregeln (Rollen, Kontrakte, Freigaben): siehe `AGENTS.md`; Plan und Kontrakte liegen in `plan/`.
+- Plugin `pw` liefert Worker (`pw:worker-code`, `pw:worker-format`), Befehle (`/pw:start`, `/pw:kontrakt`, `/pw:freigabe`, `/pw:abnahme`, `/pw:ende`, `/pw:audit`, `/pw:fable`, `/pw:kennzahlen`) und die technischen Wächter.
+- Test: `-` · Build: `-` (reines Hardware-/Doku-Repository, kein Build).
+- Einrichtungsphase: `.claude/pw.json` steht auf `"setup": true` (nur Grundschutz). Scharf schalten nach erstem Probe-Kontrakt.
+
 ## Repository Overview
 
 This repository contains hardware designs, firmware, and configuration files for **BigTreeTech EBB (Electronic Breakout Board)** CAN bus toolhead boards for 3D printers running Klipper firmware. These boards are designed for Voron and similar CoreXY 3D printers, providing a compact CAN bus solution for toolhead electronics.
