@@ -17,7 +17,7 @@ regex = '''["']([A-Za-z0-9+/_\-]{24,})["']'''
 secretGroup = 1
 entropy = 4.0
 # Projektdaten mit vielen Hashes/IDs (z. B. JSON-Registries, minifizierte Bibliotheken): nur DIESE Regel
-# für die Pfade abschalten – die Standardregeln (echte Tokens) prüfen dort weiter. Pfade anpassen:
-# [rules.allowlist]
-# description = "Projektdaten mit Hashes/IDs"
-# paths = ['''^daten/verarbeitet/''', '''\.min\.js$''']
+# für die Pfade abschalten – die Standardregeln (echte Tokens) prüfen dort weiter.
+[rules.allowlist]
+description = "CAD-Austauschformate mit Produkt-IDs (BigTreeTech-Bestand, ASCII-STEP)"
+paths = ['''(?i)\.ste?p$''']
