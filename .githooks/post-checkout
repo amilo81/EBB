@@ -1,0 +1,3 @@
+#!/bin/sh
+# Weiterleitung an .git/hooks/post-checkout (siehe _kette)
+exec sh "$(dirname "$0")/_kette" post-checkout "$@"

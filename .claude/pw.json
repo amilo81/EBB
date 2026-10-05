@@ -1,0 +1,14 @@
+{
+  "grundgeruest": "2.10.0",
+  "profil": "einzel",
+  "setup": true,
+  "test": "-",
+  "build": "-",
+  "audit": {
+    "letztes": null,
+    "intervall_tage": 60,
+    "claude_code": null,
+    "gitleaks": null
+  },
+  "abnahme_ausfuehren": true
+}

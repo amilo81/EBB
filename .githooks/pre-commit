@@ -1,0 +1,27 @@
+#!/bin/sh
+# Stufe 1: verbotene Dateien | Stufe 2: gitleaks (Regeln + Entropie) | Stufe 3: Muster-Rückfall
+fail=0
+
+verboten=$(git diff --cached --name-only | grep -E '(^|/)\.env$|(^|/)\.env\.[^/]+$|\.pem$|\.key$|\.p12$|\.pfx$|(^|/)\.mcp[^/]*\.json$|(^|/)secrets/' | grep -vE '(^|/)\.env\.example$|(^|/)\.mcp\.example\.json$')
+if [ -n "$verboten" ]; then
+  echo "ABBRUCH: verbotene Datei(en) im Commit:"; echo "$verboten"; fail=1
+fi
+
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks protect --staged --redact --no-banner -c .gitleaks.toml >/dev/null 2>&1 || {
+    echo "ABBRUCH: gitleaks hat ein Secret gefunden. Details: gitleaks protect --staged -v -c .gitleaks.toml"; fail=1; }
+else
+  echo "WARNUNG: gitleaks nicht installiert – nur Musterprüfung aktiv (maschine/einrichten.ps1 ausführen)."
+  treffer=$(git diff --cached -U0 -- . ':!.githooks/' ':!.gitleaks.toml' \
+    | grep -E '^\+' | grep -iE 'sk-ant-|sk-[a-z0-9]{20,}|gh[pousr]_[A-Za-z0-9]{30,}|github_pat_|AKIA[0-9A-Z]{16}|xox[baprs]-|eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}|(api[_-]?key|token|secret|passw(or)?d|bearer)\s*[:=]\s*["'"'"']?[^"'"'"' ]{12,}|BEGIN [A-Z ]*PRIVATE KEY')
+  if [ -n "$treffer" ]; then echo "ABBRUCH: mögliches Secret:"; echo "$treffer" | cut -c1-100; fail=1; fi
+fi
+
+[ $fail -eq 0 ] || { echo "Secret nach .env verschieben. --no-verify ist verboten (AGENTS.md §7)."; exit 1; }
+
+# Stufe 4: bestehender Projekt-Hook aus .git/hooks/ (z. B. Syntaxprüfung). core.hooksPath = .githooks
+# schaltet ihn sonst stillschweigend ab.
+# Bewusst --git-common-dir statt --git-path: --git-path folgt core.hooksPath und zeigte auf diesen Hook selbst.
+alt="$(git rev-parse --git-common-dir)/hooks/pre-commit"
+if [ -x "$alt" ] && [ "$(cd "$(dirname "$alt")" && pwd -P)" != "$(cd "$(dirname "$0")" && pwd -P)" ]; then "$alt" || { echo "ABBRUCH: bestehender Hook $alt meldet einen Fehler."; exit 1; }; fi
+exit 0

@@ -1,0 +1,8 @@
+#!/bin/sh
+# Ruft den gleichnamigen Hook aus .git/hooks/ auf (z. B. Git LFS, commit-msg-Prüfungen).
+# core.hooksPath = .githooks schaltet ihn sonst stillschweigend ab. Aufruf: _kette <hook-name> [args…]
+name="$1"; shift
+alt="$(git rev-parse --git-common-dir)/hooks/$name"
+eigen="$(cd "$(dirname "$0")" && pwd -P)"
+if [ -x "$alt" ] && [ "$(cd "$(dirname "$alt")" && pwd -P)" != "$eigen" ]; then exec "$alt" "$@"; fi
+exit 0
